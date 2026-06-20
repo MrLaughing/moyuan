@@ -17,11 +17,10 @@ class MoyuanApp : Application(), Configuration.Provider {
   @Inject
   lateinit var syncScheduler: SyncScheduler
 
-  override fun getWorkManagerConfiguration(): Configuration {
-    return Configuration.Builder()
+  override val workManagerConfiguration: Configuration
+    get() = Configuration.Builder()
       .setWorkerFactory(workerFactory)
       .build()
-  }
 
   override fun onCreate() {
     super.onCreate()
