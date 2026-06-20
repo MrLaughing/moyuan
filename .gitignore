@@ -4,6 +4,7 @@
 # Sandbox specific
 android-sdk/
 jdk21/
+.uploads/
 
 # Gradle
 .gradle/

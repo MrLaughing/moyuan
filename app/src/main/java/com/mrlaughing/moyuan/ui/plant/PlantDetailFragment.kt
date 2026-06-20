@@ -106,11 +106,11 @@ class PlantDetailFragment : Fragment() {
 
     private fun getIconForPath(path: PlantPath): Int {
         return when (path) {
-            PlantPath.JIMO -> android.R.drawable.ic_menu_gallery
-            PlantPath.BINGZHU -> android.R.drawable.ic_menu_view
-            PlantPath.SUIHAN -> android.R.drawable.ic_menu_myplaces
-            PlantPath.XUNFANG -> android.R.drawable.ic_menu_directions
-            PlantPath.HIDDEN -> android.R.drawable.ic_menu_help
+            PlantPath.JIMO -> R.drawable.ic_path_jimo
+            PlantPath.BINGZHU -> R.drawable.ic_path_bingzhu
+            PlantPath.SUIHAN -> R.drawable.ic_path_suihan
+            PlantPath.XUNFANG -> R.drawable.ic_path_xunfang
+            PlantPath.HIDDEN -> R.drawable.ic_path_hidden
         }
     }
 
