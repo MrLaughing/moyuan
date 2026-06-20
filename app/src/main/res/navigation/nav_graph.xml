@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/gardenFragment">
+
+    <fragment
+        android:id="@+id/gardenFragment"
+        android:name="com.mrlaughing.moyuan.ui.garden.GardenFragment"
+        android:label="@string/nav_garden">
+        <action
+            android:id="@+id/action_gardenFragment_to_plantDetailFragment"
+            app:destination="@id/plantDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/catalogFragment"
+        android:name="com.mrlaughing.moyuan.ui.catalog.CatalogFragment"
+        android:label="@string/nav_catalog">
+        <action
+            android:id="@+id/action_catalogFragment_to_plantDetailFragment"
+            app:destination="@id/plantDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/studyFragment"
+        android:name="com.mrlaughing.moyuan.ui.study.StudyFragment"
+        android:label="@string/nav_study" />
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.mrlaughing.moyuan.ui.profile.ProfileFragment"
+        android:label="@string/nav_profile" />
+
+    <fragment
+        android:id="@+id/plantDetailFragment"
+        android:name="com.mrlaughing.moyuan.ui.plant.PlantDetailFragment"
+        android:label="@string/title_plant_detail">
+        <argument
+            android:name="plantId"
+            app:argType="string"
+            android:defaultValue="" />
+    </fragment>
+
+    <!-- 新增 4 个页面 -->
+    <fragment
+        android:id="@+id/notebookFragment"
+        android:name="com.mrlaughing.moyuan.ui.notebook.NotebookFragment"
+        android:label="@string/nav_notebook" />
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.mrlaughing.moyuan.ui.search.SearchFragment"
+        android:label="@string/nav_search" />
+
+    <fragment
+        android:id="@+id/recommendFragment"
+        android:name="com.mrlaughing.moyuan.ui.recommend.RecommendFragment"
+        android:label="@string/nav_recommend" />
+
+    <fragment
+        android:id="@+id/statsFragment"
+        android:name="com.mrlaughing.moyuan.ui.stats.StatsFragment"
+        android:label="@string/nav_stats" />
+</navigation>

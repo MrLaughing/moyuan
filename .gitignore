@@ -1,0 +1,27 @@
+# Kotlin
+.kotlin/
+
+# Sandbox specific
+android-sdk/
+jdk21/
+
+# Gradle
+.gradle/
+build/
+/local.properties
+
+# IDE
+.idea/
+*.iml
+
+# Android
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.keystore
+!debug.keystore
+
+# macOS
+.DS_Store
