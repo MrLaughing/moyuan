@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import com.mrlaughing.moyuan.data.model.GrowthLevel
 import com.mrlaughing.moyuan.data.model.PlantPath
 import com.mrlaughing.moyuan.data.model.WitherStage
+import com.mrlaughing.moyuan.R
 import com.mrlaughing.moyuan.databinding.FragmentPlantDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
 
