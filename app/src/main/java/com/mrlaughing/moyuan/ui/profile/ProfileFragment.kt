@@ -96,9 +96,12 @@ class ProfileFragment : Fragment() {
         // 更新植物收集进度
         binding.tvCollectionProgress.text = "植物收集 $count/$TOTAL_PLANTS"
         val progressRatio = count.toFloat() / TOTAL_PLANTS
-        val params = binding.progressFill.layoutParams
-        params.width = (binding.progressFill.parent.width * progressRatio).toInt()
-        binding.progressFill.layoutParams = params
+        binding.progressFill.post {
+            val parentWidth = binding.progressFill.parent?.let { (it as? View)?.width } ?: 0
+            val params = binding.progressFill.layoutParams
+            params.width = (parentWidth * progressRatio).toInt()
+            binding.progressFill.layoutParams = params
+        }
 
         // 更新同步时间
         binding.tvLastSyncTime.text = "上次同步：$lastSync"
