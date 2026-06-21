@@ -34,6 +34,16 @@ class WereadApiClient @Inject constructor(
         }
     }
 
+    suspend fun fetchReadDataSummary(): Result<ReadDataDto> {
+        return try {
+            val request = GatewayRequest(apiName = "/readdata/summary")
+            val response = api.callGateway(request)
+            handleResponse<ReadDataDto>(response)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     suspend fun fetchShelf(): Result<ShelfSyncResponse> {
         return try {
             val request = GatewayRequest(apiName = "/shelf/sync")

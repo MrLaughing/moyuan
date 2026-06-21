@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mrlaughing.moyuan.data.remote.dto.ReadDataDetailResponse
+import com.mrlaughing.moyuan.data.remote.dto.ReadDataDto
 import com.mrlaughing.moyuan.data.repository.WereadRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -18,13 +18,13 @@ class StatsViewModel @Inject constructor(
     private val _loading = MutableLiveData(false)
     val loading: LiveData<Boolean> = _loading
 
-    private val _stats = MutableLiveData<ReadDataDetailResponse?>(null)
-    val stats: LiveData<ReadDataDetailResponse?> = _stats
+    private val _stats = MutableLiveData<ReadDataDto?>(null)
+    val stats: LiveData<ReadDataDto?> = _stats
 
     fun loadStats() {
         viewModelScope.launch {
             _loading.value = true
-            val result = wereadRepository.fetchReadData()
+            val result = wereadRepository.fetchReadDataSummary()
             result.onSuccess { _stats.value = it }.onFailure { _stats.value = null }
             _loading.value = false
         }
