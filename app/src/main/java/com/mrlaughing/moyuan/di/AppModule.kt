@@ -46,8 +46,9 @@ object AppModule {
       .create()
 
   @Provides
-  fun provideOkHttpClient(): OkHttpClient {
+  fun provideOkHttpClient(apiKeyInterceptor: ApiKeyInterceptor): OkHttpClient {
     return OkHttpClient.Builder()
+      .addInterceptor(apiKeyInterceptor)
       .connectTimeout(30, TimeUnit.SECONDS)
       .readTimeout(30, TimeUnit.SECONDS)
       .build()

@@ -12,6 +12,7 @@ import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.mrlaughing.moyuan.util.Constants
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -20,8 +21,7 @@ import javax.inject.Singleton
 class SyncScheduler @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
-
-    private val workManager = WorkManager.getInstance(context)
+    private val workManager get() = WorkManager.getInstance(context)
 
     fun scheduleDailySync() {
         val request = PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.DAYS)
@@ -39,17 +39,20 @@ class SyncScheduler @Inject constructor(
         )
     }
 
-    fun triggerNow(): LiveData<WorkInfo> {
+    fun triggerNow(): UUID {
         val request = OneTimeWorkRequestBuilder<SyncWorker>()
             .addTag(Constants.SYNC_WORK_NAME)
             .build()
         workManager.enqueueUniqueWork(
-            Constants.SYNC_WORK_NAME + "_now",
+            "${Constants.SYNC_WORK_NAME}_now",
             ExistingWorkPolicy.REPLACE,
             request
         )
-        return workManager.getWorkInfoByIdLiveData(request.id)
+        return request.id
     }
+
+    fun getWorkInfoByIdLiveData(id: UUID): LiveData<WorkInfo> =
+        workManager.getWorkInfoByIdLiveData(id)
 
     fun cancelAll() = workManager.cancelAllWorkByTag(Constants.SYNC_WORK_NAME)
 }

@@ -74,12 +74,24 @@ class GardenEngine @Inject constructor(
         return unlockEngine.checkAndUnlock(gardenMeta, updated).ifEmpty { unlockEngine.getStarterPlants(todayDate) }
     }
 
-    fun getGardenMetaForToday(meta: GardenMetaEntity, weather: Weather): GardenMetaEntity {
+    fun getGardenMetaForToday(
+        meta: GardenMetaEntity,
+        weather: Weather,
+        totalMinutes: Int = meta.totalReadMinutes,
+        booksRead: Int = meta.booksRead,
+        streakDays: Int = meta.streakDays,
+        nightReadDays: Int = meta.nightReadDays
+    ): GardenMetaEntity {
         val season = seasonEngine.getCurrentSeason()
         return meta.copy(
             currentSeason = season.name,
             currentWeather = weather.name,
-            lastUpdatedDate = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
+            lastUpdatedDate = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE),
+            totalReadMinutes = totalMinutes,
+            accumulatedMinutes = totalMinutes,
+            booksRead = booksRead,
+            streakDays = streakDays,
+            nightReadDays = nightReadDays
         )
     }
 }

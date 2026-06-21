@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.work.WorkInfo
 import com.mrlaughing.moyuan.R
 import com.mrlaughing.moyuan.data.model.Season
 import com.mrlaughing.moyuan.data.model.Weather
@@ -32,7 +33,6 @@ class GardenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 植物列表
         viewModel.plants.observe(viewLifecycleOwner) { plants ->
             binding.gardenView.setPlants(plants)
             binding.emptyGardenContainer.visibility =
@@ -40,7 +40,6 @@ class GardenFragment : Fragment() {
             binding.plantCountText.text = "${plants.size} 株"
         }
 
-        // 植物点击 -> 详情
         binding.gardenView.setOnPlantClickListener { plant ->
             val bundle = Bundle().apply {
                 putString("plantId", plant.plantId)
@@ -51,7 +50,6 @@ class GardenFragment : Fragment() {
             )
         }
 
-        // 季节 / 天气 / 统计
         viewModel.meta.observe(viewLifecycleOwner) { meta ->
             if (meta != null) {
                 val seasonDisp = when (Season.fromString(meta.currentSeason)) {
@@ -74,13 +72,11 @@ class GardenFragment : Fragment() {
             }
         }
 
-        // 累计阅读分钟
         viewModel.totalMinutes.observe(viewLifecycleOwner) { minutes ->
             binding.statsTotalHours.text = (minutes / 60).toString()
             binding.statsTotalMinutes.text = "$minutes 分钟"
         }
 
-        // 上次同步
         viewModel.lastSync.observe(viewLifecycleOwner) { date ->
             if (!date.isNullOrEmpty()) {
                 binding.syncStatusText.text = "上次同步：$date"
@@ -88,27 +84,27 @@ class GardenFragment : Fragment() {
             }
         }
 
-        // 同步结果反馈
-        viewModel.syncResult.observe(viewLifecycleOwner) { result ->
-            when (result) {
-                is GardenViewModel.SyncResult.Success -> {
-                    binding.syncStatusText.text = "同步成功"
-                    binding.syncStatusText.visibility = View.VISIBLE
-                    viewModel.clearSyncResult()
-                }
-                is GardenViewModel.SyncResult.Failed -> {
-                    binding.syncStatusText.text = "同步失败，请检查网络"
-                    binding.syncStatusText.visibility = View.VISIBLE
-                    viewModel.clearSyncResult()
-                }
-                null -> {}
-            }
-        }
-
         binding.syncButton.setOnClickListener {
-            binding.syncStatusText.text = "同步中..."
-            binding.syncStatusText.visibility = View.VISIBLE
-            viewModel.syncNow()
+            val workInfoLiveData = viewModel.syncNow()
+            if (workInfoLiveData != null) {
+                binding.syncStatusText.text = "同步中..."
+                binding.syncStatusText.visibility = View.VISIBLE
+                workInfoLiveData.observe(viewLifecycleOwner) { info ->
+                    when {
+                        info == null -> {}
+                        info.state == WorkInfo.State.SUCCEEDED -> {
+                            binding.syncStatusText.text = "同步成功"
+                            binding.syncStatusText.visibility = View.VISIBLE
+                            viewModel.markSyncSuccess()
+                        }
+                        info.state == WorkInfo.State.FAILED -> {
+                            binding.syncStatusText.text = "同步失败，请检查网络或 API Key"
+                            binding.syncStatusText.visibility = View.VISIBLE
+                            viewModel.markSyncFailed()
+                        }
+                    }
+                }
+            }
         }
     }
 

@@ -70,7 +70,20 @@ class SyncWorker @AssistedInject constructor(
             val updatedPlants = gardenEngine.recalculate(dailyRecord, plants, currentMeta, weather)
             gardenRepository.upsertPlants(updatedPlants)
 
-            gardenRepository.upsertMeta(gardenEngine.getGardenMetaForToday(currentMeta, weather))
+            // 把 API 返回的统计数据写入 meta
+            val computedTotalMinutes =
+                if (allRecords.isNotEmpty()) allRecords.sumOf { it.readMinutes }
+                else readData.totalMinutes
+            gardenRepository.upsertMeta(
+                gardenEngine.getGardenMetaForToday(
+                    meta = currentMeta,
+                    weather = weather,
+                    totalMinutes = computedTotalMinutes,
+                    booksRead = readData.booksRead,
+                    streakDays = readData.streakDays,
+                    nightReadDays = readData.nightReadDays
+                )
+            )
 
             userPrefs.setLastSyncDate(today)
             Result.success()
