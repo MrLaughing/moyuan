@@ -11,6 +11,7 @@
     <string name="btn_sync_now">立即同步</string>
     <string name="btn_sync">同步阅读数据</string>
     <string name="btn_water">浇水</string>
+    <string name="btn_save">保存</string>
     <string name="title_plant_detail">植物详情</string>
     <string name="today_read_minutes">今日阅读</string>
     <string name="total_read_minutes">累计阅读</string>
