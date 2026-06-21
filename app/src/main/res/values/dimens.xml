@@ -6,4 +6,14 @@
     <item name="text_size_small" type="dimen">12sp</item>
     <item name="text_size_medium" type="dimen">16sp</item>
     <item name="text_size_large" type="dimen">24sp</item>
+
+    <!-- GardenRendererView -->
+    <dimen name="garden_padding">20dp</dimen>
+    <dimen name="garden_label_text_size">14sp</dimen>
+    <dimen name="garden_level_text_size">24sp</dimen>
+    <dimen name="garden_label_offset">30dp</dimen>
+    <dimen name="garden_stage_offset">50dp</dimen>
+
+    <!-- 底部导航占位高度 -->
+    <dimen name="bottom_nav_padding">80dp</dimen>
 </resources>

@@ -10,6 +10,7 @@ import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import com.mrlaughing.moyuan.R
 import com.mrlaughing.moyuan.data.local.db.entity.PlantStateEntity
 import com.mrlaughing.moyuan.data.model.WitherStage
 import kotlin.math.ceil
@@ -73,7 +74,7 @@ class GardenRendererView @JvmOverloads constructor(
         val rows = ceil(plants.size.toDouble() / cols).toInt()
         if (width == 0 || height == 0) return
 
-        val padding = 20f
+        val padding = resources.getDimension(R.dimen.garden_padding)
         val cellW = (width - padding * 2) / cols
         val cellH = (height - padding * 2) / rows
         val radius = min(cellW, cellH) / 3f
@@ -109,14 +110,14 @@ class GardenRendererView @JvmOverloads constructor(
             } else {
                 plant.level
             }
-            textPaint.textSize = 24f
+            textPaint.textSize = resources.getDimension(R.dimen.garden_level_text_size)
             textPaint.alpha = 255
-            canvas.drawText(label, cx, cy + radius + 30, textPaint)
+            canvas.drawText(label, cx, cy + radius + resources.getDimension(R.dimen.garden_label_offset), textPaint)
 
             // 绘制状态标签
-            textPaint.textSize = 14f
+            textPaint.textSize = resources.getDimension(R.dimen.garden_label_text_size)
             textPaint.alpha = if (isRuined) 50 else 150
-            canvas.drawText(stage.displayName, cx, cy + radius + 50, textPaint)
+            canvas.drawText(stage.displayName, cx, cy + radius + resources.getDimension(R.dimen.garden_stage_offset), textPaint)
             textPaint.alpha = 255
         }
     }

@@ -12,6 +12,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mrlaughing.moyuan.R
 import com.mrlaughing.moyuan.data.local.db.entity.PlantStateEntity
+import com.mrlaughing.moyuan.data.model.GrowthLevel
+import com.mrlaughing.moyuan.data.model.PlantPath
 import com.mrlaughing.moyuan.databinding.FragmentCatalogBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -119,11 +121,17 @@ class CatalogFragment : Fragment() {
             filtered = filtered.filter { it.path == currentPathFilter }
         }
 
-        // 按搜索文字过滤
+        // 按搜索文字过滤（匹配植物名、路径、等级）
         if (searchText.isNotEmpty()) {
-            filtered = filtered.filter {
-                it.plantId.contains(searchText, ignoreCase = true) ||
-                it.path.contains(searchText, ignoreCase = true)
+            filtered = filtered.filter { plant ->
+                val path = PlantPath.fromString(plant.path)
+                val level = GrowthLevel.fromString(plant.level)
+                val plantName = "${path.displayName}·${plant.plantId.substringAfterLast('_')}"
+                plant.plantId.contains(searchText, ignoreCase = true) ||
+                plant.path.contains(searchText, ignoreCase = true) ||
+                path.displayName.contains(searchText, ignoreCase = true) ||
+                level.displayName.contains(searchText, ignoreCase = true) ||
+                plantName.contains(searchText, ignoreCase = true)
             }
         }
 

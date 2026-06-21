@@ -39,6 +39,14 @@ class GardenFragment : Fragment() {
             binding.emptyGardenContainer.visibility = if (empty) View.VISIBLE else View.GONE
             binding.waterButton.visibility = if (empty) View.GONE else View.VISIBLE
             binding.waterButtonDisabled.visibility = if (empty) View.VISIBLE else View.GONE
+
+            // 枯萎警告条：检查是否有枯萎的植物
+            val hasWithered = plants.any { it.witherStage != "NONE" }
+            binding.wiltWarningBar.visibility = if (hasWithered) View.VISIBLE else View.GONE
+            if (hasWithered) {
+                val witheredCount = plants.count { it.witherStage != "NONE" }
+                binding.wiltWarningText.text = "有 $witheredCount 株植物正在枯萎，请尽快浇灌！"
+            }
         }
 
         binding.gardenView.setOnPlantClickListener { plant ->
@@ -134,16 +142,6 @@ class GardenFragment : Fragment() {
                         }
                     }
                 }
-            }
-        }
-
-        // 枯萎警告条：检查是否有枯萎的植物
-        viewModel.plants.observe(viewLifecycleOwner) { plants ->
-            val hasWithered = plants.any { it.witherStage != "NONE" }
-            binding.wiltWarningBar.visibility = if (hasWithered) View.VISIBLE else View.GONE
-            if (hasWithered) {
-                val witheredCount = plants.count { it.witherStage != "NONE" }
-                binding.wiltWarningText.text = "有 $witheredCount 株植物正在枯萎，请尽快浇灌！"
             }
         }
     }

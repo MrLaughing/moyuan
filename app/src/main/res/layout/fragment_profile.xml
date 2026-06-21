@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="80dp">
+        android:paddingBottom="@dimen/bottom_nav_padding">
 
         <!-- 1. 标题栏 -->
         <TextView
@@ -84,19 +84,16 @@
                 android:layout_marginTop="16dp"
                 android:orientation="vertical">
 
-                <!-- 进度条轨道 -->
-                <FrameLayout
+                <!-- 进度条 -->
+                <ProgressBar
+                    android:id="@+id/progressFill"
+                    style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
                     android:layout_height="4dp"
-                    android:background="@drawable/bg_input">
-
-                    <!-- 进度条填充 -->
-                    <View
-                        android:id="@+id/progressFill"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/bg_tag_active" />
-                </FrameLayout>
+                    android:max="100"
+                    android:progress="0"
+                    android:progressTint="@color/ink_dark"
+                    android:progressBackgroundTint="@color/bg_input" />
 
                 <!-- 进度标签 -->
                 <TextView
