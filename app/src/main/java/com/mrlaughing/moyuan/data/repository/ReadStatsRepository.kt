@@ -26,6 +26,10 @@ class ReadStatsRepository @Inject constructor(
         dailyRecordDao.upsert(record)
     }
 
+    suspend fun upsertRecords(records: List<DailyRecordEntity>) {
+        dailyRecordDao.upsertAll(records)
+    }
+
     suspend fun upsertBooks(books: List<BookTrackingEntity>) {
         bookTrackingDao.upsertAll(books)
     }

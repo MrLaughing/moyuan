@@ -13,6 +13,9 @@ interface DailyRecordDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsert(entity: DailyRecordEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsertAll(entities: List<DailyRecordEntity>)
+
     @Query("SELECT * FROM daily_record ORDER BY date DESC")
     fun observeAll(): Flow<List<DailyRecordEntity>>
 

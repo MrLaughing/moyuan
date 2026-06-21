@@ -32,7 +32,6 @@ class SyncWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result {
         return try {
-            // 未配置 API Key 时直接返回成功，不重试
             if (!wereadRepository.isConfigured()) {
                 return Result.success()
             }
@@ -46,20 +45,28 @@ class SyncWorker @AssistedInject constructor(
 
             val today = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
 
-            // 只映射一次 dailyRecord，复用
-            val dailyRecord = wereadDataMapper.toDailyRecord(readData, today)
-            statsRepository.upsertRecord(dailyRecord)
+            // 保存所有历史日记录（含今天），使 SUM 查询能正确累加
+            val allRecords = wereadDataMapper.toDailyRecordList(readData.dailyRecords)
+            if (allRecords.isNotEmpty()) {
+                statsRepository.upsertRecords(allRecords)
+            }
+            // 兜底：如果 API 没返回 dailyRecords，至少保存今天的记录
+            if (allRecords.none { it.date == today }) {
+                val todayRecord = wereadDataMapper.toDailyRecord(readData, today)
+                statsRepository.upsertRecord(todayRecord)
+            }
+
             statsRepository.upsertBooks(wereadDataMapper.toBookTracking(shelf.books))
 
-            // 更新 BaseSnapshot
             snapshotManager.updateSnapshot(readData, shelf)
 
             val currentMeta = gardenRepository.getMeta()
                 ?: GardenMetaEntity(id = 1, lastUpdatedDate = today)
             val plants = gardenRepository.getAllPlants()
 
-            // 天气只 roll 一次，复用于计算和存储
             val weather = seasonEngine.rollWeather(currentMeta)
+            val dailyRecord = allRecords.find { it.date == today }
+                ?: wereadDataMapper.toDailyRecord(readData, today)
             val updatedPlants = gardenEngine.recalculate(dailyRecord, plants, currentMeta, weather)
             gardenRepository.upsertPlants(updatedPlants)
 
