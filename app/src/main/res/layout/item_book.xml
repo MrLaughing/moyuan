@@ -1,37 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.mrlaughing.moyuan.ui.common.EinkCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp">
+    android:layout_marginTop="8dp"
+    android:background="@drawable/bg_card"
+    android:orientation="horizontal"
+    android:padding="14dp"
+    android:gravity="center_vertical">
+
+    <ImageView
+        android:id="@+id/bookCover"
+        android:layout_width="48dp"
+        android:layout_height="66dp"
+        android:scaleType="centerCrop"
+        android:background="@color/divider_light"
+        android:contentDescription="书籍封面" />
+
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
-        <ImageView
-            android:id="@+id/bookCover"
-            android:layout_width="40dp"
-            android:layout_height="55dp"
-            android:scaleType="centerCrop"
-            android:background="#E0E0E0"
-            android:layout_marginEnd="10dp"
-            android:contentDescription="书籍封面" />
+        android:layout_weight="1"
+        android:layout_marginStart="14dp"
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/bookTitle"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#000000"
+            android:textColor="@color/text_primary"
             android:textStyle="bold"
             android:textSize="15sp"
             android:maxLines="2"
             android:ellipsize="end" />
+
         <TextView
-            android:id="@+id/bookMinutes"
-            android:layout_width="wrap_content"
+            android:id="@+id/bookAuthor"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#666666"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/text_secondary"
             android:textSize="12sp"
-            android:layout_marginStart="8dp" />
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/bookMinutes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:background="@color/divider_light" />
+        </LinearLayout>
     </LinearLayout>
-</com.mrlaughing.moyuan.ui.common.EinkCardView>
+</LinearLayout>

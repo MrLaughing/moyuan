@@ -9,10 +9,11 @@
     <string name="nav_recommend">推荐</string>
     <string name="nav_stats">统计</string>
     <string name="btn_sync_now">立即同步</string>
+    <string name="btn_sync">同步阅读数据</string>
     <string name="btn_water">浇水</string>
     <string name="title_plant_detail">植物详情</string>
-    <string name="today_read_minutes">今日阅读（分钟）</string>
-    <string name="total_read_minutes">累计阅读（分钟）</string>
+    <string name="today_read_minutes">今日阅读</string>
+    <string name="total_read_minutes">累计阅读</string>
     <string name="books_read">阅读书目</string>
     <string name="streak_days">连续天数</string>
     <string name="unlocked_plant">解锁新植物</string>
@@ -27,6 +28,7 @@
     <string name="path_suihan">岁寒</string>
     <string name="path_xunfang">寻芳</string>
     <string name="path_hidden">隐藏</string>
+    <string name="weather_clear">晴</string>
     <string name="text_empty_default">暂无内容</string>
     <string name="text_loading">加载中…</string>
     <string name="btn_search">搜索</string>
@@ -57,4 +59,59 @@
     <string name="label_depth_level">阅读深度</string>
     <string name="label_depth_description">深度描述</string>
     <string name="recommend_default_reason">根据你的阅读旅程，这些书可能对你有启发。</string>
+
+    <!-- 新增：统计详情 -->
+    <string name="stat_books_total">在读书籍</string>
+    <string name="stat_books_finished">已读完</string>
+    <string name="stat_minutes_total">累计分钟</string>
+    <string name="stat_hours_total">累计小时</string>
+    <string name="stat_highlights">划线总数</string>
+    <string name="stat_thoughts">想法总数</string>
+    <string name="stat_notes">笔记总数</string>
+    <string name="stat_streak">连续阅读</string>
+    <string name="stat_read_days">阅读天数</string>
+    <string name="stat_last_sync">上次同步</string>
+    <string name="stat_plant_count">植物株数</string>
+    <string name="stat_unit_book">本</string>
+    <string name="stat_unit_minute">分钟</string>
+    <string name="stat_unit_hour">小时</string>
+    <string name="stat_unit_day">天</string>
+    <string name="stat_unit_none">条</string>
+
+    <!-- 新增：Garden 文案 -->
+    <string name="garden_empty_title">花园空空如也</string>
+    <string name="garden_empty_subtitle">同步你的阅读数据，让文字在花园中生根发芽</string>
+    <string name="garden_title_prefix">花园 ·</string>
+
+    <!-- 新增：Profile 文案 -->
+    <string name="profile_title">我的</string>
+    <string name="profile_subtitle">阅读之旅 · 始于2026年1月1日</string>
+    <string name="profile_api_hint">微信读书 API Key</string>
+    <string name="profile_api_toggle_show">显示</string>
+    <string name="profile_api_toggle_hide">隐藏</string>
+    <string name="profile_api_save">保存</string>
+    <string name="profile_api_saved">已保存</string>
+    <string name="profile_sync_now">立即同步</string>
+    <string name="profile_stats_title">阅读统计</string>
+
+    <!-- 新增：Study 文案 -->
+    <string name="study_title">读书</string>
+    <string name="study_empty">书架空空，同步后会显示你的阅读旅程</string>
+    <string name="study_bookshelf_title">书架</string>
+
+    <!-- 新增：Catalog 文案 -->
+    <string name="catalog_title">图鉴</string>
+    <string name="catalog_empty">尚未解锁任何植物</string>
+    <string name="catalog_subtitle">阅读解锁 · 共 20 种植物</string>
+    <string name="catalog_unlocked">已解锁</string>
+    <string name="catalog_locked">未解锁</string>
+
+    <!-- 新增：通用 -->
+    <string name="common_tap_to_sync">点击同步</string>
+    <string name="common_sync_success">同步成功</string>
+    <string name="common_sync_failed">同步失败，请检查网络</string>
+    <string name="common_minutes">分钟</string>
+    <string name="common_hours">小时</string>
+    <string name="common_days">天</string>
+    <string name="common_books">本</string>
 </resources>

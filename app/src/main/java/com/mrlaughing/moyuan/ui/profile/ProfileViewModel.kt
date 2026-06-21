@@ -34,8 +34,11 @@ class ProfileViewModel @Inject constructor(
     fun saveApiKey(key: String) {
         viewModelScope.launch {
             userPrefs.setApiKey(key)
-            // 保存 API Key 后自动触发一次同步
             syncScheduler.triggerNow()
         }
+    }
+
+    fun syncNow() {
+        syncScheduler.triggerNow()
     }
 }

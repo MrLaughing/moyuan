@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -33,12 +32,15 @@ class GardenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 植物列表
         viewModel.plants.observe(viewLifecycleOwner) { plants ->
             binding.gardenView.setPlants(plants)
-            binding.emptyGardenText.visibility =
+            binding.emptyGardenContainer.visibility =
                 if (plants.isEmpty()) View.VISIBLE else View.GONE
+            binding.plantCountText.text = "${plants.size} 株"
         }
 
+        // 植物点击 -> 详情
         binding.gardenView.setOnPlantClickListener { plant ->
             val bundle = Bundle().apply {
                 putString("plantId", plant.plantId)
@@ -49,31 +51,65 @@ class GardenFragment : Fragment() {
             )
         }
 
+        // 季节 / 天气 / 统计
         viewModel.meta.observe(viewLifecycleOwner) { meta ->
-            val season = meta?.currentSeason?.let { Season.fromString(it).displayName } ?: "—"
-            val weather = meta?.currentWeather?.let { Weather.fromString(it).displayName } ?: "—"
-            binding.seasonInfo.text = "季节：$season · 天气：$weather"
-        }
-
-        viewModel.totalMinutes.observe(viewLifecycleOwner) { minutes ->
-            binding.titleGarden.text = "花园 · 累计 ${minutes} 分钟"
-        }
-
-        viewModel.syncResult.observe(viewLifecycleOwner) { result ->
-            when (result) {
-                is GardenViewModel.SyncResult.Success -> {
-                    Toast.makeText(context, "同步成功", Toast.LENGTH_SHORT).show()
-                    viewModel.clearSyncResult()
+            if (meta != null) {
+                val seasonDisp = when (Season.fromString(meta.currentSeason)) {
+                    Season.SPRING -> "春·萌芽"
+                    Season.SUMMER -> "夏·盛放"
+                    Season.AUTUMN -> "秋·收获"
+                    Season.WINTER -> "冬·沉淀"
                 }
-                is GardenViewModel.SyncResult.Failed -> {
-                    Toast.makeText(context, "同步失败，请检查网络后重试", Toast.LENGTH_SHORT).show()
-                    viewModel.clearSyncResult()
+                val weatherDisp = when (Weather.fromString(meta.currentWeather)) {
+                    Weather.CLEAR -> "晴"
+                    Weather.SPRING_RAIN -> "春雨"
+                    Weather.FIRST_SNOW -> "初雪"
+                    Weather.MOONLIT -> "月夜"
                 }
-                null -> { }
+                binding.seasonText.text = seasonDisp
+                binding.weatherText.text = weatherDisp
+                binding.statsBookCount.text = meta.booksRead.toString()
+                binding.statsStreakDays.text = meta.streakDays.toString()
+                binding.statsNightDays.text = "${meta.nightReadDays} 夜读"
             }
         }
 
-        binding.syncButton.setOnClickListener { viewModel.syncNow() }
+        // 累计阅读分钟
+        viewModel.totalMinutes.observe(viewLifecycleOwner) { minutes ->
+            binding.statsTotalHours.text = (minutes / 60).toString()
+            binding.statsTotalMinutes.text = "$minutes 分钟"
+        }
+
+        // 上次同步
+        viewModel.lastSync.observe(viewLifecycleOwner) { date ->
+            if (!date.isNullOrEmpty()) {
+                binding.syncStatusText.text = "上次同步：$date"
+                binding.syncStatusText.visibility = View.VISIBLE
+            }
+        }
+
+        // 同步结果反馈
+        viewModel.syncResult.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is GardenViewModel.SyncResult.Success -> {
+                    binding.syncStatusText.text = "同步成功"
+                    binding.syncStatusText.visibility = View.VISIBLE
+                    viewModel.clearSyncResult()
+                }
+                is GardenViewModel.SyncResult.Failed -> {
+                    binding.syncStatusText.text = "同步失败，请检查网络"
+                    binding.syncStatusText.visibility = View.VISIBLE
+                    viewModel.clearSyncResult()
+                }
+                null -> {}
+            }
+        }
+
+        binding.syncButton.setOnClickListener {
+            binding.syncStatusText.text = "同步中..."
+            binding.syncStatusText.visibility = View.VISIBLE
+            viewModel.syncNow()
+        }
     }
 
     override fun onDestroyView() {

@@ -43,10 +43,11 @@ class CatalogFragment : Fragment() {
         binding.catalogRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.catalogRecyclerView.adapter = adapter
 
-        viewModel.plants.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
-            binding.emptyCatalogText.visibility =
-                if (it.isEmpty()) View.VISIBLE else View.GONE
+        viewModel.plants.observe(viewLifecycleOwner) { plants ->
+            adapter.submitList(plants)
+            val empty = plants.isEmpty()
+            binding.catalogRecyclerView.visibility = if (empty) View.GONE else View.VISIBLE
+            binding.emptyCatalogContainer.visibility = if (empty) View.VISIBLE else View.GONE
         }
     }
 
