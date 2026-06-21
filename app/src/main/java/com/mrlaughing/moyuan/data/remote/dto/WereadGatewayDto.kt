@@ -1,6 +1,7 @@
 package com.mrlaughing.moyuan.data.remote.dto
 
 import com.google.gson.annotations.SerializedName
+import com.google.gson.JsonElement
 
 /**
  * 微信读书 Gateway API 请求格式
@@ -12,16 +13,17 @@ data class GatewayRequest(
 
 /**
  * 微信读书 Gateway API 响应格式
+ * data 是 JsonElement，由调用方自行反序列化为具体类型
  */
-data class GatewayResponse<T>(
-    @SerializedName("errcode") val errcode: Int,
-    @SerializedName("success") val success: Boolean,
-    @SerializedName("data") val data: T?,
-    @SerializedName("error") val error: String?
+data class GatewayResponse(
+    @SerializedName("errcode") val errcode: Int = -1,
+    @SerializedName("success") val success: Boolean = false,
+    @SerializedName("data") val data: JsonElement? = null,
+    @SerializedName("error") val error: String? = null
 )
 
 /**
- * 阅读数据详情响应 (来自 /readdata/detail)
+ * 阅读数据详情响应
  */
 data class ReadDataDetailResponse(
     @SerializedName("readTimes") val readTimes: Int = 0,
@@ -47,7 +49,7 @@ data class PreferBook(
 )
 
 /**
- * 书架同步响应 (来自 /shelf/sync)
+ * 书架同步响应
  */
 data class ShelfSyncResponse(
     @SerializedName("books") val books: List<ShelfBook> = emptyList(),

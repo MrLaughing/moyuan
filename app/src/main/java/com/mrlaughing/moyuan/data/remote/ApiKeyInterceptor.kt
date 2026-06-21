@@ -17,12 +17,9 @@ class ApiKeyInterceptor @Inject constructor(
         val apiKey = runBlocking { userPrefs.getApiKey() }
 
         if (!apiKey.isNullOrEmpty()) {
-            val newUrl = original.url.newBuilder()
-                .addQueryParameter("api_key", apiKey)
-                .build()
             val newRequest = original.newBuilder()
-                .url(newUrl)
-                .addHeader("X-Key", apiKey)
+                .header("Authorization", "Bearer $apiKey")
+                .header("Content-Type", "application/json")
                 .build()
             return chain.proceed(newRequest)
         }

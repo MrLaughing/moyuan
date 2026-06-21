@@ -1,46 +1,59 @@
 package com.mrlaughing.moyuan.data.remote
 
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.mrlaughing.moyuan.data.remote.dto.*
+import com.mrlaughing.moyuan.util.Constants
+import okhttp3.OkHttpClient
 import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class WereadApiClient @Inject constructor(
-    private val api: WereadApi
+    private val gson: Gson,
+    okHttpClient: OkHttpClient
 ) {
-    /**
-     * 阅读统计详情
-     */
-    suspend fun fetchReadData(mode: String = "overall"): Result<ReadDataDetailResponse> {
+
+    private val api: WereadApi = Retrofit.Builder()
+        .baseUrl(Constants.WEREAD_BASE_URL)
+        .client(okHttpClient)
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .build()
+        .create(WereadApi::class.java)
+
+    suspend fun fetchReadData(): Result<ReadDataDetailResponse> {
         return try {
             val request = GatewayRequest(apiName = "/readdata/detail")
-            val response = api.getReadData(request)
-            handleGatewayResponse(response)
+            val response = api.callGateway(request)
+            handleResponse<ReadDataDetailResponse>(response)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-    /**
-     * 书架同步
-     */
     suspend fun fetchShelf(): Result<ShelfSyncResponse> {
         return try {
             val request = GatewayRequest(apiName = "/shelf/sync")
-            val response = api.getShelf(request)
-            handleGatewayResponse(response)
+            val response = api.callGateway(request)
+            handleResponse<ShelfSyncResponse>(response)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-    private fun <T> handleGatewayResponse(response: Response<GatewayResponse<T>>): Result<T> {
+    private inline fun <reified T> handleResponse(
+        response: Response<GatewayResponse>
+    ): Result<T> {
         return if (response.isSuccessful) {
             val body = response.body()
             if (body != null) {
                 if (body.errcode == 0 && body.success && body.data != null) {
-                    Result.success(body.data)
+                    val type = object : TypeToken<T>() {}.type
+                    val data: T = gson.fromJson(body.data, type)
+                    Result.success(data)
                 } else {
                     Result.failure(IllegalStateException("Gateway error: errcode=${body.errcode}, error=${body.error}"))
                 }
