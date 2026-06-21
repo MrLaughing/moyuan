@@ -18,7 +18,7 @@ class WereadRepository @Inject constructor(
      * 获取阅读统计数据
      */
     suspend fun fetchReadData(): Result<ReadDataDetailResponse> {
-        return apiClient.fetchReadData("overall")
+        return apiClient.fetchReadData()
     }
 
     /**
