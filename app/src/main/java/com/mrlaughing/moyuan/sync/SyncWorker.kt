@@ -1,6 +1,7 @@
 package com.mrlaughing.moyuan.sync
 
 import android.content.Context
+import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
@@ -30,18 +31,36 @@ class SyncWorker @AssistedInject constructor(
     private val userPrefs: UserPrefs
 ) : CoroutineWorker(appContext, workerParams) {
 
+    companion object {
+        private const val TAG = "SyncWorker"
+    }
+
     override suspend fun doWork(): Result {
         return try {
+            Log.d(TAG, "SyncWorker: 开始同步")
+
             if (!wereadRepository.isConfigured()) {
+                Log.w(TAG, "SyncWorker: API Key 未配置，跳过同步")
                 return Result.success()
             }
 
             snapshotManager.initializeIfNeeded()
 
-            val readData = wereadRepository.fetchReadData().getOrNull()
-                ?: return Result.retry()
-            val shelf = wereadRepository.fetchShelf().getOrNull()
-                ?: return Result.retry()
+            val readDataResult = wereadRepository.fetchReadData()
+            if (readDataResult.isFailure) {
+                Log.e(TAG, "SyncWorker: fetchReadData 失败", readDataResult.exceptionOrNull())
+                return Result.failure()
+            }
+            val readData = readDataResult.getOrThrow()
+            Log.d(TAG, "SyncWorker: readData 获取成功, todayMinutes=${readData.todayMinutes}, totalMinutes=${readData.totalMinutes}, dailyRecords.size=${readData.dailyRecords.size}")
+
+            val shelfResult = wereadRepository.fetchShelf()
+            if (shelfResult.isFailure) {
+                Log.e(TAG, "SyncWorker: fetchShelf 失败", shelfResult.exceptionOrNull())
+                return Result.failure()
+            }
+            val shelf = shelfResult.getOrThrow()
+            Log.d(TAG, "SyncWorker: shelf 获取成功, totalBooks=${shelf.totalBooks}, books.size=${shelf.books.size}")
 
             val today = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
 
@@ -49,14 +68,17 @@ class SyncWorker @AssistedInject constructor(
             val allRecords = wereadDataMapper.toDailyRecordList(readData.dailyRecords)
             if (allRecords.isNotEmpty()) {
                 statsRepository.upsertRecords(allRecords)
+                Log.d(TAG, "SyncWorker: 保存了 ${allRecords.size} 条日记录")
             }
             // 兜底：如果 API 没返回 dailyRecords，至少保存今天的记录
             if (allRecords.none { it.date == today }) {
                 val todayRecord = wereadDataMapper.toDailyRecord(readData, today)
                 statsRepository.upsertRecord(todayRecord)
+                Log.d(TAG, "SyncWorker: 兜底保存今天记录, minutes=${todayRecord.readMinutes}")
             }
 
             statsRepository.upsertBooks(wereadDataMapper.toBookTracking(shelf.books))
+            Log.d(TAG, "SyncWorker: 保存了 ${shelf.books.size} 本书")
 
             snapshotManager.updateSnapshot(readData, shelf)
 
@@ -74,21 +96,23 @@ class SyncWorker @AssistedInject constructor(
             val computedTotalMinutes =
                 if (allRecords.isNotEmpty()) allRecords.sumOf { it.readMinutes }
                 else readData.totalMinutes
-            gardenRepository.upsertMeta(
-                gardenEngine.getGardenMetaForToday(
-                    meta = currentMeta,
-                    weather = weather,
-                    totalMinutes = computedTotalMinutes,
-                    booksRead = readData.booksRead,
-                    streakDays = readData.streakDays,
-                    nightReadDays = readData.nightReadDays
-                )
+            val newMeta = gardenEngine.getGardenMetaForToday(
+                meta = currentMeta,
+                weather = weather,
+                totalMinutes = computedTotalMinutes,
+                booksRead = readData.booksRead,
+                streakDays = readData.streakDays,
+                nightReadDays = readData.nightReadDays
             )
+            gardenRepository.upsertMeta(newMeta)
+            Log.d(TAG, "SyncWorker: meta 已更新, totalMinutes=$computedTotalMinutes, booksRead=${readData.booksRead}, streakDays=${readData.streakDays}")
 
             userPrefs.setLastSyncDate(today)
+            Log.d(TAG, "SyncWorker: 同步完成")
             Result.success()
         } catch (e: Exception) {
-            Result.retry()
+            Log.e(TAG, "SyncWorker: 同步异常", e)
+            Result.failure()
         }
     }
 }

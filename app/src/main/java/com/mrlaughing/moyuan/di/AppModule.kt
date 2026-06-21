@@ -22,6 +22,7 @@ object AppModule {
   fun provideMoyuanDatabase(@ApplicationContext context: Context): MoyuanDatabase {
     return Room.databaseBuilder(context, MoyuanDatabase::class.java, "moyuan_db")
       .addMigrations(MoyuanDatabase.MIGRATION_1_2, MoyuanDatabase.MIGRATION_2_3)
+      .fallbackToDestructiveMigration()
       .build()
   }
 
