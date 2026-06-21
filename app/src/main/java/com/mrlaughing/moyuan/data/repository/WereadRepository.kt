@@ -4,6 +4,7 @@ import com.mrlaughing.moyuan.data.local.prefs.UserPrefs
 import com.mrlaughing.moyuan.data.remote.WereadApiClient
 import com.mrlaughing.moyuan.data.remote.dto.NotebookDto
 import com.mrlaughing.moyuan.data.remote.dto.ReadDataDetailResponse
+import com.mrlaughing.moyuan.data.remote.dto.ReadDataDto
 import com.mrlaughing.moyuan.data.remote.dto.RecommendDto
 import com.mrlaughing.moyuan.data.remote.dto.SearchResultDto
 import com.mrlaughing.moyuan.data.remote.dto.ShelfSyncResponse
@@ -27,7 +28,7 @@ class WereadRepository @Inject constructor(
     /**
      * 获取阅读统计数据（摘要）
      */
-    suspend fun fetchReadDataSummary(): Result<com.mrlaughing.moyuan.data.remote.dto.ReadDataDto> {
+    suspend fun fetchReadDataSummary(): Result<ReadDataDto> {
         return apiClient.fetchReadDataSummary()
     }
 
