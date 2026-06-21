@@ -44,6 +44,36 @@ class WereadApiClient @Inject constructor(
         }
     }
 
+    suspend fun fetchNotebooks(): Result<List<NotebookDto>> {
+        return try {
+            val request = GatewayRequest(apiName = "/notebook/list")
+            val response = api.callGateway(request)
+            handleResponse<List<NotebookDto>>(response)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun fetchRecommendations(): Result<RecommendDto> {
+        return try {
+            val request = GatewayRequest(apiName = "/recommend/list")
+            val response = api.callGateway(request)
+            handleResponse<RecommendDto>(response)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun searchBook(keyword: String): Result<SearchResultDto> {
+        return try {
+            val request = GatewayRequest(apiName = "/search/book")
+            val response = api.callGateway(request)
+            handleResponse<SearchResultDto>(response)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     private inline fun <reified T> handleResponse(
         response: Response<GatewayResponse>
     ): Result<T> {
