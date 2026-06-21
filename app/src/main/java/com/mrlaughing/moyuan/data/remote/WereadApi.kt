@@ -1,40 +1,32 @@
 package com.mrlaughing.moyuan.data.remote
 
-import com.mrlaughing.moyuan.data.remote.dto.NotebookDto
-import com.mrlaughing.moyuan.data.remote.dto.ReadDataDto
-import com.mrlaughing.moyuan.data.remote.dto.RecommendDto
-import com.mrlaughing.moyuan.data.remote.dto.SearchResultDto
-import com.mrlaughing.moyuan.data.remote.dto.ShelfDto
+import com.mrlaughing.moyuan.data.remote.dto.*
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Query
+import retrofit2.http.Body
+import retrofit2.http.POST
 
+/**
+ * 微信读书 Gateway API
+ * 官方文档: https://i.weread.qq.com/api/agent/gateway
+ * 所有请求都是 POST + JSON Body
+ */
 interface WereadApi {
 
-    // 1. 阅读统计 - 总览
-    @GET("/readdata/detail")
+    /**
+     * 阅读统计详情
+     * mode: weekly / monthly / annually / overall
+     * baseTime: 0=当前周期，传历史时间戳可查看历史
+     */
+    @POST("/readdata/detail")
     suspend fun getReadData(
-        @Query("mode") mode: String = "overall"
-    ): Response<ReadDataDto>
+        @Body request: GatewayRequest
+    ): Response<GatewayResponse<ReadDataDetailResponse>>
 
-    // 2. 书架同步 - 浏览个人藏书
-    @GET("/shelf/sync")
-    suspend fun getShelf(): Response<ShelfDto>
-
-    // 3. 笔记和划线 - 查看划线 / 想法
-    @GET("/user/notebooks")
-    suspend fun getNotebooks(): Response<List<NotebookDto>>
-
-    // 4. 书籍搜索 - 按关键词搜索书籍
-    @GET("/search")
-    suspend fun searchBook(
-        @Query("keyword") keyword: String,
-        @Query("count") count: Int = 20
-    ): Response<SearchResultDto>
-
-    // 5. 推荐好书 - 基于阅读偏好的个性化推荐
-    @GET("/book/recommend")
-    suspend fun getRecommendations(
-        @Query("count") count: Int = 10
-    ): Response<RecommendDto>
+    /**
+     * 书架同步
+     */
+    @POST("/shelf/sync")
+    suspend fun getShelf(
+        @Body request: GatewayRequest
+    ): Response<GatewayResponse<ShelfSyncResponse>>
 }
