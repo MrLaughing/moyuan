@@ -4,13 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import androidx.work.WorkInfo
 import com.mrlaughing.moyuan.data.local.prefs.UserPrefs
 import com.mrlaughing.moyuan.data.local.db.entity.GardenMetaEntity
 import com.mrlaughing.moyuan.data.local.db.entity.PlantStateEntity
+import com.mrlaughing.moyuan.data.model.Season
+import com.mrlaughing.moyuan.data.model.Weather
 import com.mrlaughing.moyuan.data.repository.GardenRepository
 import com.mrlaughing.moyuan.sync.SyncScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
 
@@ -57,6 +61,20 @@ class GardenViewModel @Inject constructor(
 
     fun markApiKeyMissing() {
         _syncStatus.postValue(SyncStatus.ApiKeyMissing)
+    }
+
+    fun updateSeason(season: Season) {
+        viewModelScope.launch {
+            val current = gardenRepository.getMeta() ?: GardenMetaEntity()
+            gardenRepository.upsertMeta(current.copy(currentSeason = season.name))
+        }
+    }
+
+    fun updateWeather(weather: Weather) {
+        viewModelScope.launch {
+            val current = gardenRepository.getMeta() ?: GardenMetaEntity()
+            gardenRepository.upsertMeta(current.copy(currentWeather = weather.name))
+        }
     }
 
     sealed class SyncStatus {

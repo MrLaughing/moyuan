@@ -1,12 +1,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Theme.Moyuan" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">@color/eink_black</item>
-        <item name="colorPrimaryDark">@color/eink_black</item>
-        <item name="colorAccent">@color/eink_black</item>
-        <item name="colorOnPrimary">@color/eink_white</item>
+        <item name="colorPrimary">@color/btn_primary</item>
+        <item name="colorPrimaryDark">@color/btn_primary</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="colorOnPrimary">@color/text_on_primary</item>
         <item name="colorSurface">@color/bg_primary</item>
         <item name="colorOnSurface">@color/text_primary</item>
         <item name="colorOnSecondary">@color/text_primary</item>
+        <item name="android:statusBarColor">@color/bg_primary</item>
+        <item name="android:navigationBarColor">@color/bg_primary</item>
         <item name="android:windowBackground">@color/bg_primary</item>
         <item name="android:textColorPrimary">@color/text_primary</item>
         <item name="android:textColorSecondary">@color/text_secondary</item>
@@ -19,9 +21,9 @@
     </style>
 
     <style name="MoyuanButton" parent="Widget.MaterialComponents.Button">
-        <item name="android:backgroundTint">@color/btn_bg</item>
-        <item name="android:textColor">@color/btn_text</item>
-        <item name="iconTint">@color/btn_text</item>
+        <item name="android:backgroundTint">@color/btn_outline</item>
+        <item name="android:textColor">@color/btn_outline_text</item>
+        <item name="iconTint">@color/btn_outline_text</item>
         <item name="cornerRadius">8dp</item>
         <item name="strokeColor">@color/btn_border</item>
         <item name="strokeWidth">1dp</item>
@@ -35,21 +37,22 @@
     </style>
 
     <style name="MoyuanButton.Primary" parent="MoyuanButton">
-        <item name="android:backgroundTint">@color/eink_black</item>
-        <item name="android:textColor">@color/eink_white</item>
-        <item name="iconTint">@color/eink_white</item>
+        <item name="android:backgroundTint">@color/btn_primary</item>
+        <item name="android:textColor">@color/btn_primary_text</item>
+        <item name="iconTint">@color/btn_primary_text</item>
+        <item name="strokeWidth">0dp</item>
     </style>
 
     <style name="MoyuanButton.Outlined" parent="MoyuanButton">
-        <item name="android:backgroundTint">@color/bg_primary</item>
-        <item name="strokeColor">@color/eink_black</item>
+        <item name="android:backgroundTint">@color/btn_outline</item>
+        <item name="strokeColor">@color/btn_border</item>
         <item name="strokeWidth">1dp</item>
-        <item name="android:textColor">@color/eink_black</item>
+        <item name="android:textColor">@color/btn_outline_text</item>
     </style>
 
     <style name="MoyuanTextInput" parent="Widget.MaterialComponents.TextInputEditText.OutlinedBox">
         <item name="android:background">@drawable/bg_input</item>
-        <item name="boxStrokeColor">@color/eink_black</item>
+        <item name="boxStrokeColor">@color/border_default</item>
         <item name="boxStrokeWidth">1dp</item>
         <item name="android:textColor">@color/text_primary</item>
         <item name="android:textColorHint">@color/text_hint</item>

@@ -1,20 +1,33 @@
 <resources>
+    <!-- 水墨宣纸风格配色 -->
+    <color name="text_primary">#FF2C2416</color>
+    <color name="text_secondary">#FF78716C</color>
+    <color name="text_hint">#FFA89F91</color>
+
+    <color name="bg_primary">#FFF5F0E8</color>
+    <color name="bg_secondary">#FFFAF6F0</color>
+    <color name="bg_stat_card">#FFFAFAF5</color>
+    <color name="bg_card">#FFFAFAF5</color>
+
+    <color name="divider">#FFE0D8CC</color>
+    <color name="divider_dark">#FFB8AFA3</color>
+    <color name="divider_light">#FFEDE8E0</color>
+    <color name="border_light">#FFE8E0D6</color>
+    <color name="border_default">#FFD4C8B8</color>
+
+    <color name="accent">#FF2C2416</color>
+    <color name="btn_text">#FFFFFFFF</color>
+    <color name="btn_bg">#FFF5F0E8</color>
+    <color name="btn_border">#FFD4C8B8</color>
+
+    <color name="bg_tag_active">#FF5C4033</color>
+    <color name="bg_warning">#FFFAF0E0</color>
+    <color name="bg_disabled">#FFE8E0D6</color>
+
+    <!-- E-ink 兼容保留 -->
     <color name="eink_black">#FF000000</color>
     <color name="eink_white">#FFFFFFFF</color>
     <color name="eink_gray">#FF888888</color>
     <color name="eink_light_gray">#FFEEEEEE</color>
     <color name="eink_dark_gray">#FF444444</color>
-    <color name="text_primary">#FF000000</color>
-    <color name="text_secondary">#FF666666</color>
-    <color name="text_hint">#FFAAAAAA</color>
-    <color name="bg_primary">#FFFFFFFF</color>
-    <color name="bg_secondary">#FFF6F6F6</color>
-    <color name="bg_card">#FFF6F6F6</color>
-    <color name="divider">#FFDDDDDD</color>
-    <color name="divider_dark">#FF000000</color>
-    <color name="divider_light">#FFEEEEEE</color>
-    <color name="accent">#FF000000</color>
-    <color name="btn_text">#FF000000</color>
-    <color name="btn_bg">#FFF6F6F6</color>
-    <color name="btn_border">#FF000000</color>
 </resources>

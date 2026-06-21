@@ -19,6 +19,10 @@ class ProfileFragment : Fragment() {
     private val viewModel: ProfileViewModel by viewModels()
     private var keyHidden = true
 
+    companion object {
+        private const val TOTAL_PLANTS = 27
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -87,11 +91,18 @@ class ProfileFragment : Fragment() {
 
     private fun updateStats() {
         val lastSync = viewModel.lastSync.value ?: "—"
-        val total = viewModel.totalMinutes.value ?: 0
         val count = viewModel.plantCount.value ?: 0
-        binding.statPlantCount.text = count.toString()
-        binding.statMinutes.text = "$total 分钟"
-        binding.statLastSync.text = "上次同步：$lastSync"
+
+        // 更新植物收集进度
+        binding.tvCollectionProgress.text = "植物收集 $count/$TOTAL_PLANTS"
+        val progressRatio = count.toFloat() / TOTAL_PLANTS
+        val params = binding.progressFill.layoutParams
+        params.width = (binding.progressFill.parent.width * progressRatio).toInt()
+        binding.progressFill.layoutParams = params
+
+        // 更新同步时间
+        binding.tvLastSyncTime.text = "上次同步：$lastSync"
+        binding.tvSettingSyncTime.text = lastSync
     }
 
     override fun onDestroyView() {
