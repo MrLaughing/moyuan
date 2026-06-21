@@ -24,11 +24,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build debug APK
-        run: ./gradlew compileDebugKotlin --no-daemon 2>&1 | tail -100 || true
-        continue-on-error: true
-
-      - name: Full build
-        run: ./gradlew assembleDebug --no-daemon 2>&1 | tail -100
+        run: ./gradlew assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
